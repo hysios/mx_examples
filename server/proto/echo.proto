@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package echo;
+
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/hysios/mx_example/pb;pb";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {version: "1.0"}
+  external_docs: {
+    url: "https://github.com/hysios/mx_example/proto"
+    description: "mx framework api demo"
+  }
+  schemes: [
+    HTTP,
+    HTTPS
+  ];
+};
+
+service EchoService {
+  rpc Echo(EchoRequest) returns (EchoResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/path
+      get: "/api/echo"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Echo Method"
+      tags: "EchoService"
+    };
+  }
+}
+
+message EchoRequest {
+  string say = 1;
+}
+
+message EchoResponse {
+  string message = 1;
+}

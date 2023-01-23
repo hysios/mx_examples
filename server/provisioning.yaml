@@ -1,0 +1,9 @@
+---
+symbols:
+  - github.com/hysios/mx.Gateway
+  - github.com/hysios/mx.WithServiceClient
+  - github.com/hysios/mx_example/gen/proto:pb.NewHelloServiceClient
+  - github.com/hysios/mx_example/gen/proto:pb.RegisterHelloServiceHandlerClient
+  - "HelloService"
+provisionings:
+  - [0, [4, [1, [2, 3]]]]

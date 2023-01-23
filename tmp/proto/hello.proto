@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package hello;
+
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+// imports
+option go_package = "play.test/gen/proto;pb";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {version: "1.0"}
+  external_docs: {
+    url: "play.test/gen/proto",
+    description: "mx framework api demo"
+  }
+  schemes: [
+    HTTP,
+    HTTPS
+  ];
+};
+
+service HelloService {
+  rpc GetUser(UserRequest) returns (UserResponse) {
+    option (google.api.http) = {get: "/api/users/{id}"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "GetUser"
+      tags: "HelloService"
+    };
+  }
+}
+
+message UserRequest {
+  int32 id = 1;
+  string name = 2;
+}
+
+message UserResponse {
+  int32 id = 1;
+  string name = 2;
+}
