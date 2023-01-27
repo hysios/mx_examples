@@ -4,10 +4,13 @@ import (
 	"flag"
 
 	pb "github.com/hysios/example_server/gen/proto"
+	"github.com/hysios/example_server/services/echo"
 	"github.com/hysios/example_server/services/hello"
 	"github.com/hysios/mx/discovery/agent"
 	_ "github.com/hysios/mx/discovery/provider/consul"
-	"github.com/hysios/mx/service"
+	"github.com/hysios/mx/logger"
+	"github.com/hysios/mx/server"
+	"go.uber.org/zap"
 )
 
 var (
@@ -18,18 +21,39 @@ var (
 func main() {
 	flag.Parse()
 
-	var srv *service.Server
+	srv := server.New("ServiceCluster")
 	if *filedescript {
-		srv = service.NewServiceFileDescriptor(&pb.HelloService_ServiceDesc,
+		srv.RegisterService(
+			&pb.HelloService_ServiceDesc,
 			&hello.HelloService{},
-			pb.File_proto_hello_proto,
+			server.WithFileDescriptor(pb.File_proto_hello_proto),
+		)
+
+		srv.RegisterService(
+			&pb.EchoService_ServiceDesc,
+			&echo.EchoService{},
+			server.WithFileDescriptor(pb.File_proto_echo_proto),
 		)
 	} else {
-		srv = service.NewServiceDesc(&pb.HelloService_ServiceDesc,
+		srv.RegisterService(
+			&pb.HelloService_ServiceDesc,
 			&hello.HelloService{},
+		)
+
+		srv.RegisterService(
+			&pb.EchoService_ServiceDesc,
+			&echo.EchoService{},
 		)
 	}
 
-	agent.RegisterServer(srv)
+	if err := agent.RegisterServer(srv); err != nil {
+		logger.Logger.Error("register server", zap.Error(err))
+	}
+
 	srv.ServeOn(*addr)
+}
+
+func init() {
+	cfg, _ := zap.NewDevelopment()
+	logger.SetLogger(cfg)
 }

@@ -21,21 +21,19 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service HelloService {
-  rpc GetUser(UserRequest) returns (UserResponse) {
-    option (google.api.http) = {get: "/api/users/{id}"};
+  rpc Hello(HelloRequest) returns (HelloResponse) {
+    option (google.api.http) = {get: "/api/hello"};
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "GetUser"
+      summary: "Hello"
       tags: "HelloService"
     };
   }
 }
 
-message UserRequest {
-  int32 id = 1;
-  string name = 2;
+message HelloRequest {
+  string say = 1;
 }
 
-message UserResponse {
-  int32 id = 1;
-  string name = 2;
+message HelloResponse {
+  string echo = 1;
 }

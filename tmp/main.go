@@ -8,6 +8,9 @@ import (
 
 func main() {
 	// Services Register
-	srv := service.New("HelloService", &hello.HelloService{}, service.WithServiceDesc(&pb.HelloService_ServiceDesc))
+	srv := service.NewServiceFileDescriptor(&pb.HelloService_ServiceDesc,
+		&hello.HelloService{},
+		pb.File_proto_hello_proto,
+	)
 	srv.Start()
 }

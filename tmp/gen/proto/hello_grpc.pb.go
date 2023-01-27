@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type HelloServiceClient interface {
-	GetUser(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error)
+	Hello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloResponse, error)
 }
 
 type helloServiceClient struct {
@@ -34,9 +34,9 @@ func NewHelloServiceClient(cc grpc.ClientConnInterface) HelloServiceClient {
 	return &helloServiceClient{cc}
 }
 
-func (c *helloServiceClient) GetUser(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error) {
-	out := new(UserResponse)
-	err := c.cc.Invoke(ctx, "/hello.HelloService/GetUser", in, out, opts...)
+func (c *helloServiceClient) Hello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloResponse, error) {
+	out := new(HelloResponse)
+	err := c.cc.Invoke(ctx, "/hello.HelloService/Hello", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +47,7 @@ func (c *helloServiceClient) GetUser(ctx context.Context, in *UserRequest, opts 
 // All implementations must embed UnimplementedHelloServiceServer
 // for forward compatibility
 type HelloServiceServer interface {
-	GetUser(context.Context, *UserRequest) (*UserResponse, error)
+	Hello(context.Context, *HelloRequest) (*HelloResponse, error)
 	mustEmbedUnimplementedHelloServiceServer()
 }
 
@@ -55,8 +55,8 @@ type HelloServiceServer interface {
 type UnimplementedHelloServiceServer struct {
 }
 
-func (UnimplementedHelloServiceServer) GetUser(context.Context, *UserRequest) (*UserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
+func (UnimplementedHelloServiceServer) Hello(context.Context, *HelloRequest) (*HelloResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Hello not implemented")
 }
 func (UnimplementedHelloServiceServer) mustEmbedUnimplementedHelloServiceServer() {}
 
@@ -71,20 +71,20 @@ func RegisterHelloServiceServer(s grpc.ServiceRegistrar, srv HelloServiceServer)
 	s.RegisterService(&HelloService_ServiceDesc, srv)
 }
 
-func _HelloService_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserRequest)
+func _HelloService_Hello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HelloRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(HelloServiceServer).GetUser(ctx, in)
+		return srv.(HelloServiceServer).Hello(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/hello.HelloService/GetUser",
+		FullMethod: "/hello.HelloService/Hello",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(HelloServiceServer).GetUser(ctx, req.(*UserRequest))
+		return srv.(HelloServiceServer).Hello(ctx, req.(*HelloRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -97,8 +97,8 @@ var HelloService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*HelloServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetUser",
-			Handler:    _HelloService_GetUser_Handler,
+			MethodName: "Hello",
+			Handler:    _HelloService_Hello_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -10,11 +10,7 @@ type HelloService struct {
 	pb.UnimplementedHelloServiceServer
 }
 
-func (s *HelloService) GetUser(ctx context.Context, req *pb.UserRequest) (resp *pb.UserResponse, err error) {
-
+func (s *HelloService) Hello(ctx context.Context, req *pb.HelloRequest) (resp *pb.HelloResponse, err error) {
 	// TODO: implement
-	return &pb.UserResponse{
-		Name: "hello",
-	}, nil
-
+	return
 }
