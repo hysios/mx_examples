@@ -8,7 +8,6 @@ import (
 	_ "github.com/hysios/mx/discovery/provider/consul"
 	"github.com/hysios/mx/gateway"
 	"github.com/hysios/mx/logger"
-
 	"go.uber.org/zap"
 )
 

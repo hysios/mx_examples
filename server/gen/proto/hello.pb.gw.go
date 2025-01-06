@@ -158,6 +158,7 @@ func RegisterHelloServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		}
 
 		forward_HelloService_Hello_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
 	})
 
 	return nil
